@@ -232,3 +232,7 @@ nav {
     .pad0{
         padding:0 !important;
     }
+
+.validation-message{
+    color:red;
+}

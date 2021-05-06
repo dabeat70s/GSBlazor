@@ -11,6 +11,7 @@ namespace BethanysPieShopHRM.Api
     public class Startup
     {
         public Startup(IConfiguration configuration)
+
         {
             Configuration = configuration;
         }
@@ -31,7 +32,7 @@ namespace BethanysPieShopHRM.Api
 
             services.AddCors(options =>
             {
-                options.AddPolicy("Open", builder => builder.AllowAnyOrigin().AllowAnyHeader());
+                options.AddPolicy("Open", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             });
 
             services.AddControllers();
