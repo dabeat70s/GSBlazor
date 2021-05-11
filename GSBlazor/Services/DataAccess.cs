@@ -8,6 +8,7 @@ namespace GSBlazor.Services
 {
     public class DataAccess
     {
-        public static string BaseLocation = "https://localhost:44340"; //"http://localhost:5000/";
+        private const string addres = "https://localhost:44340";  //"http://localhost:5000/";
+        public static readonly string BaseLocation = addres ;
     }
 }
