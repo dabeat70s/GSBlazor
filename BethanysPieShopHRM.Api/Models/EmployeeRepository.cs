@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GSBlazor.Shared;
 
@@ -22,6 +23,55 @@ namespace BethanysPieShopHRM.Api.Models
         {
             return _appDbContext.Employees.FirstOrDefault(c => c.EmployeeId == employeeId);
         }
+
+        //extras
+        public IEnumerable<Employee> GetLongEmployeeList()
+        {
+            var Employees = new List<Employee>();
+            for (int i = 0; i < 1000; i++)
+            {
+                var employee = new Employee()
+                {
+                    EmployeeId = i,
+                    FirstName = RandomString(10),
+                    LastName = RandomString(18)
+                };
+                Employees.Add(employee);
+            }
+            return Employees;
+        }
+
+        public IEnumerable<Employee> GetTakeLongEmployeeList(int request, int count)
+        {
+            var Employees = new List<Employee>();
+            for (int i = 0; i < count; i++)
+            {
+                var employee = new Employee()
+                {
+                    EmployeeId = i,
+                    FirstName = RandomString(10),
+                    LastName = RandomString(18),
+                    Street = (request + i).ToString()
+                    
+                };
+                Employees.Add(employee);
+            }
+            return Employees;
+        }
+
+        private Random random = new Random();
+
+        private string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+        //extras end
+
+
+
+
 
         public Employee AddEmployee(Employee employee)
         {

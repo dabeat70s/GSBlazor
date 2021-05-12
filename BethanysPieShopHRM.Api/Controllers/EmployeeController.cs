@@ -1,5 +1,7 @@
 ﻿using BethanysPieShopHRM.Api.Models;
 using GSBlazor.Shared;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BethanysPieShopHRM.Api.Controllers
@@ -10,9 +12,16 @@ namespace BethanysPieShopHRM.Api.Controllers
     {
         private readonly IEmployeeRepository _employeeRepository;
 
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public EmployeeController(IWebHostEnvironment webHostEnvironment, 
+            IHttpContextAccessor httpContextAccessor,IEmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
+            _webHostEnvironment = webHostEnvironment;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]
@@ -27,6 +36,21 @@ namespace BethanysPieShopHRM.Api.Controllers
             return Ok(_employeeRepository.GetEmployeeById(id));
         }
 
+        //extras
+        [HttpGet("long")]
+        public IActionResult GetLongEmployeeList()
+        {
+            return Ok(_employeeRepository.GetLongEmployeeList());
+        }
+
+        [HttpGet("long/{startindex}/{count}")]
+        public IActionResult GetLongEmployeeList(int startIndex, int count)
+        {
+            return Ok(_employeeRepository.GetTakeLongEmployeeList(startIndex, count));
+        }
+        //extras end
+
+
         [HttpPost]
         public IActionResult CreateEmployee([FromBody] Employee employee)
         {
@@ -40,6 +64,15 @@ namespace BethanysPieShopHRM.Api.Controllers
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            string currentUrl = _httpContextAccessor.HttpContext.Request.Host.Value;
+            var path = $"{_webHostEnvironment.WebRootPath}\\uploads\\{employee.ImageName}";
+            var fileStream = System.IO.File.Create(path);
+            fileStream.Write(employee.ImageContent, 0, employee.ImageContent.Length);
+            fileStream.Close();
+            employee.ImageName = $"https://{currentUrl}/uploads/{employee.ImageName}";
+
+
 
             var createdEmployee = _employeeRepository.AddEmployee(employee);
 

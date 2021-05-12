@@ -16,4 +16,8 @@
     <ProjectReference Include="..\GSBlazor.Shared\GSBlazor.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <BlazorWebAssemblyLazyLoad Include="BethanysPieShopHRM.ComponentsLibrary.dll" />
+  </ItemGroup>
+
 </Project>

@@ -10,6 +10,8 @@ namespace BethanysPieShopHRM.Api.Models
     {
         IEnumerable<Employee> GetAllEmployees();
         Employee GetEmployeeById(int employeeId);
+        IEnumerable<Employee> GetLongEmployeeList();
+        IEnumerable<Employee> GetTakeLongEmployeeList(int request, int count);
         Employee AddEmployee(Employee employee);
         Employee UpdateEmployee(Employee employee);
         void DeleteEmployee(int employeeId);

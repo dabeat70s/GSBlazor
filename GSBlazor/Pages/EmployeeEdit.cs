@@ -1,8 +1,10 @@
 ﻿using GSBlazor.Services;
 using GSBlazor.Shared;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,6 +27,7 @@ namespace GSBlazor.Pages
 
         public Employee Employee { get; set; } = new Employee();
         public string Details { get; set; }
+        public ElementReference FirstNameInput { get; set; }
         public List<Country> Countries { get; set; } = new List<Country>();
         public List<JobCategory> JobCategories { get; set; } = new List<JobCategory>();
 
@@ -39,16 +42,21 @@ namespace GSBlazor.Pages
         protected override async Task OnInitializedAsync()
         {
             await InitEditForm();
-          
+
         }
 
         protected async override Task OnParametersSetAsync()
         {
-           await InitEditForm();
-           
+            await InitEditForm();
+
+        }
+        protected async override Task OnAfterRenderAsync(bool firstRender)
+        {
+            await FirstNameInput.FocusAsync();
         }
 
-      
+
+
 
         private async Task InitEditForm()
         {
@@ -75,6 +83,16 @@ namespace GSBlazor.Pages
             JobCategoryId = Employee.JobCategoryId.ToString();
         }
 
+        //image adding
+        private IReadOnlyList<IBrowserFile> selectedFiles;
+        private void OnInputFileChange(InputFileChangeEventArgs e)
+        {
+            selectedFiles = e.GetMultipleFiles();
+            Message = $"{selectedFiles.Count} file(s) selected";
+            StateHasChanged();
+        }
+
+
         protected async Task HandleValidSubmit()
         {
             Saved = false;
@@ -83,7 +101,20 @@ namespace GSBlazor.Pages
 
             if (Employee.EmployeeId == 0) //new
             {
-               
+                //image adding
+                if (selectedFiles != null)//take first image
+                {
+                    var file = selectedFiles[0];
+                    Stream stream = file.OpenReadStream(1000000);
+                    MemoryStream ms = new MemoryStream();
+                    await stream.CopyToAsync(ms);
+                    stream.Close();
+
+                    Employee.ImageName = file.Name;
+                    Employee.ImageContent = ms.ToArray();
+                }
+
+
                 var addedEmployee = await EmployeeDataService.AddEmployee(Employee);
                 if (addedEmployee != null)
                 {
@@ -99,7 +130,7 @@ namespace GSBlazor.Pages
                 }
             }
             else
-            {                
+            {
                 await EmployeeDataService.UpdateEmployee(Employee);
                 StatusClass = "alert-success";
                 Message = "Employee updated successfully.";
@@ -127,5 +158,6 @@ namespace GSBlazor.Pages
         {
             NavigationManager.NavigateTo("/employeeoverview");
         }
+
     }
 }

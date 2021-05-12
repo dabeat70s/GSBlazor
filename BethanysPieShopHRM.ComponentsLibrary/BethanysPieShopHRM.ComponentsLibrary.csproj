@@ -21,4 +21,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GSBlazor.Shared\GSBlazor.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

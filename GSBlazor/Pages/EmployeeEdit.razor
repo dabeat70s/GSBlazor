@@ -13,9 +13,16 @@
             <DataAnnotationsValidator />
             <ValidationSummary></ValidationSummary>
 
+
+            <div class="form-group row">
+                <label for="image" class="col-sm-3">Select image: </label>
+                <InputFile OnChange="OnInputFileChange" multiple />
+            </div>
+
             <div class="form-group row">
                 <label for="firstName" class="col-sm-3">First name: </label>
-                <InputText id="firstName" class="form-control col-sm-8" @bind-Value="@Employee.FirstName" placeholder="Enter first name"></InputText>
+                @*<InputText id="firstName" class="form-control col-sm-8" @bind-Value="@Employee.FirstName" placeholder="Enter first name"></InputText>*@
+                <input @ref="FirstNameInput" id="firstName" class="form-control col-sm-8" @bind="@Employee.FirstName" />
                 <ValidationMessage class="offset-sm-3 col-sm-8" For="@(() => Employee.FirstName)" />
             </div>
 
@@ -98,11 +105,25 @@
 
             <div class="form-group row">
                 <label for="gender" class="col-sm-3">Gender: </label>
-                <InputSelect id="gender" class="form-control col-sm-8" @bind-Value=@Employee.Gender>
-                    <option value="@(Gender.Male)">Male</option>
-                    <option value="@(Gender.Female)">Female</option>
-                    <option value="@(Gender.Other)">Other</option>
-                </InputSelect>
+                @*<InputSelect id="gender" class="form-control col-sm-8" @bind-Value=@Employee.Gender>
+            <option value="@(Gender.Male)">Male</option>
+            <option value="@(Gender.Female)">Female</option>
+            <option value="@(Gender.Other)">Other</option>
+        </InputSelect>*@
+
+                <InputRadioGroup Name="genderRadioGroup" @bind-Value="@Employee.Gender">
+
+                    <br>
+                    @foreach (var gender in (Gender[])Enum.GetValues(typeof(Gender)))
+                        {
+                <span class="radioBut">
+                    <InputRadio Name="genderRadioGroup" Value="gender" />
+                    @gender
+                    <br><br>
+                </span>
+                        }
+                </InputRadioGroup>
+
             </div>
 
             <div class="form-group row">

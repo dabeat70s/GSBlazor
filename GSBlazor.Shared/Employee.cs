@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GSBlazor.Shared
 {
@@ -39,5 +40,9 @@ namespace GSBlazor.Shared
 
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+
+        [NotMapped]
+        public byte[] ImageContent { get; set; }
+        public string ImageName { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -16,6 +17,30 @@ namespace GSBlazor.Services
         {
             _httpClient = httpClient;
         }
+
+        //extras
+        public async Task<IEnumerable<Employee>> GetLongEmployeeList()
+        {
+            return await _httpClient.GetFromJsonAsync<IEnumerable<Employee>>($"api/employee/long");
+        }
+
+        //public async Task<IEnumerable<Employee>> GetTakeLongEmployeeList(int startIndex, int count)
+        //{
+        //    return await _httpClient.GetFromJsonAsync<List<Employee>>($"api/employee/long/{startIndex}/{count}");
+        //}
+
+        public async Task<IEnumerable<Employee>> GetTakeLongEmployeeList(int startIndex, int count)
+        {
+            var emps=  await _httpClient.GetFromJsonAsync<List<Employee>>($"api/employee/long/{startIndex}/{count}");
+            //foreach (var item in emps)
+            //{
+            //    item.Street = item.EmployeeId.ToString();
+            //}
+
+            return emps;
+        }
+
+        //extras end
 
         public async Task<Employee> AddEmployee(Employee employee)
         {

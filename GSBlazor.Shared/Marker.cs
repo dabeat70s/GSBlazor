@@ -1,4 +1,8 @@
-﻿namespace BethanysPieShopHRM.ComponentsLibrary.Map
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GSBlazor.Shared
 {
     public class Marker
     {
