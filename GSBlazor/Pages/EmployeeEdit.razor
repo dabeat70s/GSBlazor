@@ -106,21 +106,21 @@
             <div class="form-group row">
                 <label for="gender" class="col-sm-3">Gender: </label>
                 @*<InputSelect id="gender" class="form-control col-sm-8" @bind-Value=@Employee.Gender>
-            <option value="@(Gender.Male)">Male</option>
-            <option value="@(Gender.Female)">Female</option>
-            <option value="@(Gender.Other)">Other</option>
-        </InputSelect>*@
+                <option value="@(Gender.Male)">Male</option>
+                <option value="@(Gender.Female)">Female</option>
+                <option value="@(Gender.Other)">Other</option>
+            </InputSelect>*@
 
                 <InputRadioGroup Name="genderRadioGroup" @bind-Value="@Employee.Gender">
 
                     <br>
                     @foreach (var gender in (Gender[])Enum.GetValues(typeof(Gender)))
                         {
-                <span class="radioBut">
-                    <InputRadio Name="genderRadioGroup" Value="gender" />
-                    @gender
-                    <br><br>
-                </span>
+                        <span class="radioBut">
+                            <InputRadio Name="genderRadioGroup" Value="gender" />
+                            @gender
+                            <br><br>
+                        </span>
                         }
                 </InputRadioGroup>
 
@@ -151,16 +151,18 @@
                 <ValidationMessage class="offset-sm-3 col-sm-8" For="@(() => Employee.Comment)" />
             </div>
 
-            <button type="submit" class="btn btn-primary edit-btn">Save employee</button>
+            <button type="submit" class="btn btn-primary edit-btn">@SaveOrUpdate employee</button>
 
+
+
+            <a class="btn btn-outline-primary" @onclick="@NavigateToOverview">Back to overview</a>
+            
             @if (Employee.EmployeeId > 0)
             {
                 <a class="btn btn-danger" @onclick="@DeleteEmployee">
                     Delete
                 </a>
             }
-
-            <a class="btn btn-outline-primary" @onclick="@NavigateToOverview">Back to overview</a>
         </EditForm>
     </section>
 

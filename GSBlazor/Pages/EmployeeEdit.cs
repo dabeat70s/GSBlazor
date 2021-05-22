@@ -26,6 +26,8 @@ namespace GSBlazor.Pages
         public NavigationManager NavigationManager { get; set; }
 
         public Employee Employee { get; set; } = new Employee();
+
+        public string SaveOrUpdate { get; set; }
         public string Details { get; set; }
         public ElementReference FirstNameInput { get; set; }
         public List<Country> Countries { get; set; } = new List<Country>();
@@ -72,11 +74,13 @@ namespace GSBlazor.Pages
                 //add some defaults
                 Employee = new Employee { CountryId = 1, JobCategoryId = 1, BirthDate = DateTime.Now, JoinedDate = DateTime.Now };
                 Details = "New Employee";
+                SaveOrUpdate = "Save";
             }
             else
             {
                 Employee = await EmployeeDataService.GetEmployeeDetails(int.Parse(EmployeeId));
                 Details = $"{Employee.FirstName} {Employee.LastName}";
+                SaveOrUpdate = "Update";
             }
 
             CountryId = Employee.CountryId.ToString();
