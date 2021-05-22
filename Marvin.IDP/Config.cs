@@ -34,15 +34,15 @@ namespace Marvin.IDP
             { 
                 new Client
                 {
-                    ClientId = "bethanyspieshophr",
+                   ClientId = "bethanyspieshophr",
                     ClientName = "Bethany's Pie Shop HRM",
                     AllowedGrantTypes = GrantTypes.Code,
                     RequireClientSecret = false,
                     RequirePkce = true,
-                    RedirectUris = { "https://localhost:44341/authentication/login-callback" },
-                    PostLogoutRedirectUris = { "https://localhost:44341/authentication/logout-callback" },
+                    RedirectUris = { "https://localhost:44301/authentication/login-callback" },
+                    PostLogoutRedirectUris = { "https://localhost:44301/authentication/logout-callback" },
                     AllowedScopes = { "openid", "profile", "email" },
-                    AllowedCorsOrigins = { "https://localhost:44341" }
+                    AllowedCorsOrigins = { "https://localhost:44341", "https://localhost:44301" }
                 }             
             };
     }
