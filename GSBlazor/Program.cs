@@ -1,3 +1,4 @@
+using GSBlazor.MessageHandlers;
 using GSBlazor.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,9 +19,14 @@ namespace GSBlazor
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 
+            builder.Services.AddTransient<BethanysPieShopHRMApiAuthorizationMessageHandler>();
+
             builder.Services.AddOidcAuthentication(options =>
             {
                 builder.Configuration.Bind("OidcConfiguration", options.ProviderOptions);
+                // options.UserOptions.NameClaim = "email";
+                //builder.Configuration.Bind("UserOptions", options.UserOptions);
+
                 //options.ProviderOptions.Authority = "https://localhost:44333";
                 //options.ProviderOptions.ClientId = "bethanyspieshophr";
                 //options.ProviderOptions.DefaultScopes.Add("email");
@@ -32,9 +38,15 @@ namespace GSBlazor
             });
 
             //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            builder.Services.AddHttpClient<IEmployeeDataService, EmployeeDataService>(client => client.BaseAddress = new Uri("https://localhost:44340/"));
-            builder.Services.AddHttpClient<ICountryDataService, CountryDataService>(client => client.BaseAddress = new Uri("https://localhost:44340/"));
-            builder.Services.AddHttpClient<IJobCategoryDataService, JobCategoryDataService>(client => client.BaseAddress = new Uri("https://localhost:44340/"));
+            builder.Services.AddHttpClient<IEmployeeDataService, EmployeeDataService>(client =>
+            client.BaseAddress = new Uri("https://localhost:44340/"))
+                .AddHttpMessageHandler<BethanysPieShopHRMApiAuthorizationMessageHandler>();
+            builder.Services.AddHttpClient<ICountryDataService, CountryDataService>(
+                client => client.BaseAddress = new Uri("https://localhost:44340/"))
+                 .AddHttpMessageHandler<BethanysPieShopHRMApiAuthorizationMessageHandler>();
+            builder.Services.AddHttpClient<IJobCategoryDataService, JobCategoryDataService>
+                (client => client.BaseAddress = new Uri("https://localhost:44340/"))
+                 .AddHttpMessageHandler<BethanysPieShopHRMApiAuthorizationMessageHandler>();
             
 
             await builder.Build().RunAsync();

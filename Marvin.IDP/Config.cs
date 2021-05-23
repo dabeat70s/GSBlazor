@@ -41,8 +41,9 @@ namespace Marvin.IDP
                     RequirePkce = true,
                     RedirectUris = { "https://localhost:44301/authentication/login-callback" },
                     PostLogoutRedirectUris = { "https://localhost:44301/authentication/logout-callback" },
-                    AllowedScopes = { "openid", "profile", "email" },
-                    AllowedCorsOrigins = { "https://localhost:44341", "https://localhost:44301" }
+                    AllowedScopes = { "openid", "profile", "email", "bethanyspieshophrapi" },
+                    AllowedCorsOrigins = { "https://localhost:44341", "https://localhost:44301" },
+                   // RequireConsent =false
                 }             
             };
     }

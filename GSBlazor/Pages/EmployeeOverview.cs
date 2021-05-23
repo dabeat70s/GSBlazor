@@ -3,6 +3,7 @@ using GSBlazor.Components;
 using GSBlazor.Services;
 using GSBlazor.Shared;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace GSBlazor.Pages
 {
     public partial class EmployeeOverview
     {
+		[CascadingParameter]
+		Task<AuthenticationState> authenticationStateTask { get; set; }
 
 		public IEnumerable<Employee> Employees { get; set; }
 
@@ -32,7 +35,17 @@ namespace GSBlazor.Pages
 		protected void QuickAddEmployee()
 		{
 			AddEmployeeDialog.Show();
+
 		}
+
+		protected async Task GetingAuthSate()
+        {
+			var authenticationState = await authenticationStateTask;
+            if (authenticationState.User.Identity.Name == "useremail")
+            {
+				// show or do this
+            }
+        }
 
 		public async Task AddEmployeeDialog_OnDialogClose()
 		{
