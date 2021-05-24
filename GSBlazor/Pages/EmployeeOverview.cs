@@ -17,8 +17,9 @@ namespace GSBlazor.Pages
 		Task<AuthenticationState> authenticationStateTask { get; set; }
 
 		public IEnumerable<Employee> Employees { get; set; }
+        public string Errors { get; set; }
 
-		[Inject]
+        [Inject]
         public IEmployeeDataService	 EmployeeDataService { get; set; }
 
 		protected AddEmployeeDialog AddEmployeeDialog { get; set; }
@@ -30,7 +31,16 @@ namespace GSBlazor.Pages
 		protected override async Task OnInitializedAsync()
 		{
 
-			Employees = (await EmployeeDataService.GetAllEmployees()).ToList();
+            try
+            {
+                Employees = (await EmployeeDataService.GetAllEmployees()).ToList();
+            }
+            catch (Exception ex)
+            {
+
+				Console.WriteLine("No Go Mate ex.mess = "+ex.Message);
+				Errors = "An Error Occured";
+            }
 		}
 		protected void QuickAddEmployee()
 		{

@@ -1,13 +1,17 @@
 ﻿@page "/employeeoverview"
-@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+@*@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+    (Policy = GSBlazor.Shared.Policies.CanManageEmployees)]*@
 
 <h1 class="page-title">All employees</h1>
 
-@if (Employees == null)
+@if (Employees == null && Errors == null)
 {
     <p><em>Loading...</em></p>
 }
-else
+else if (Errors != null) 
+{
+    <p>@Errors</p>
+}else
 {
     <table class="table">
         <thead>

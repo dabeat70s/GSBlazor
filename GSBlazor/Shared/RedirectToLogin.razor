@@ -1,10 +1,33 @@
 ﻿@inject NavigationManager Navigation
 
-@code { 
-    protected override void OnInitialized()
+<h1 style="display:@display">You are not Authorized</h1>
+
+
+@code {
+    [CascadingParameter]
+    Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    public string display { get; set; }
+    protected override async Task OnInitializedAsync()
     {
-        Navigation.NavigateTo($"authentication/login?returnUrl=" +
-            $"{Uri.EscapeDataString(Navigation.Uri)}");
+        var authenticationState = await authenticationStateTask;
+        Console.WriteLine("authenticationState = " + authenticationState.User.Identity.IsAuthenticated);
+
+        if (!authenticationState.User.Identity.IsAuthenticated)
+        {
+            Navigation.NavigateTo($"authentication/login?returnUrl=" +
+           $"{Uri.EscapeDataString(Navigation.Uri)}");
+            display = "none";
+        }
+        else
+        {
+            display = "block";
+            await Task.Delay(6000);
+
+            Navigation.NavigateTo("/");
+
+        }
     }
+
 
 }

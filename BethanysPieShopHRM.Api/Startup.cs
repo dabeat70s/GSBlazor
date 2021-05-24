@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using GSBlazor.Shared;
 
 namespace BethanysPieShopHRM.Api
 {
@@ -27,16 +28,26 @@ namespace BethanysPieShopHRM.Api
         {
             //services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(databaseName: "BethanysPieShopHRM"));
 
+            //add an Authorization Policy  DOESNT WORK!!!
+            services.AddAuthorization(authOptions =>
+            {
+                authOptions.AddPolicy(
+                    Policies.CanManageEmployees,
+                    Policies.CanManageEmployeesPolicy());
+            });
+
+
             var requireAuthenticationUserPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .Build();
 
             services.AddAuthentication(
                 IdentityServerAuthenticationDefaults.AuthenticationScheme
-                ).AddIdentityServerAuthentication(options=>
+                ).AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = "https://localhost:44333";
                     options.ApiName = "bethanyspieshophrapi";
+                    
                 });
 
             services.AddDbContext<AppDbContext>(options =>
@@ -52,9 +63,17 @@ namespace BethanysPieShopHRM.Api
                 options.AddPolicy("Open", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             });
 
-            services.AddControllers(configure =>
-             configure.Filters.Add(new AuthorizeFilter(requireAuthenticationUserPolicy)));
-                //.AddJsonOptions(options => options.JsonSerializerOptions.ca);
+            
+            services.AddControllers(configure => configure.Filters.Add(new AuthorizeFilter(requireAuthenticationUserPolicy)));
+            // (c=>c.Filters.Add(new AuthorizeFilter(Policies.CanManageEmployeesPolicy())));
+            //services.AddAuthorization(authOptions =>
+            //{
+            //    authOptions.AddPolicy(
+            //        Policies.CanManageEmployees,
+            //        Policies.CanManageEmployeesPolicy());
+            //});
+
+            //.AddJsonOptions(options => options.JsonSerializerOptions.ca);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,7 +93,7 @@ namespace BethanysPieShopHRM.Api
 
             app.UseAuthorization();
 
-           
+            
 
             app.UseCors("Open");
 

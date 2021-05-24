@@ -17,7 +17,7 @@ namespace GSBlazor
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            builder.RootComponents.Add<App>("app");
+            builder.RootComponents.Add<GSBlazor.App>("app");
 
             builder.Services.AddTransient<BethanysPieShopHRMApiAuthorizationMessageHandler>();
 
@@ -35,6 +35,13 @@ namespace GSBlazor
                 //options.ProviderOptions.ResponseType = "code";
 
                
+            });
+
+            builder.Services.AddAuthorizationCore(authOptions =>
+            {
+                authOptions.AddPolicy(
+                    GSBlazor.Shared.Policies.CanManageEmployees,
+                    Shared.Policies.CanManageEmployeesPolicy());
             });
 
             //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });

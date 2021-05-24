@@ -1,5 +1,6 @@
 ﻿using BethanysPieShopHRM.Api.Models;
 using GSBlazor.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ namespace BethanysPieShopHRM.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+   
     public class EmployeeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
@@ -25,6 +27,7 @@ namespace BethanysPieShopHRM.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy  = Policies.CanManageEmployees)]
         public IActionResult GetAllEmployees()
         {
             return Ok(_employeeRepository.GetAllEmployees());

@@ -15,6 +15,7 @@ namespace GSBlazor.MessageHandlers
         {
             ConfigureHandler( 
                  authorizedUrls: new[] { "https://localhost:44340/" }); //can use congif file
+            
         }
     }
 }
